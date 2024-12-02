@@ -5,12 +5,58 @@ const prompt = require('prompt-sync')();
 console.log('Write the number to convert to Calculate Two\'s Complement binary');
 const userInput = parseInt(prompt());
 
+const arrGetBinaryPlaceValues = (positiveNumber) => {
+    // Finds Binary place values
+    const arrBinaryPlace = []
+    for (let i = 1; i < positiveNumber; i *= 2) {
+        arrBinaryPlace.push(i);
+        if ((i * 2) > positiveNumber) {
+            arrBinaryPlace.push(i *= 2);
+        }
+    }
+    arrBinaryPlace.reverse();
+    console.log(`This is the Binary place values for ${positiveNumber} -> ${arrBinaryPlace}`); 
+    return arrBinaryPlace;
+}
+
+/**Description of negativeNumberHandler Function
+     * Computes the binary place values for a given positive number.
+     *
+     * This function generates an array of binary place values that are less than
+     * or equal to the specified positive number. It iterates through powers of two,
+     * adding each to the array, and reverses the array before returning it.
+     *
+     * @param {number} positiveNumber - The positive number for which to find binary place values.
+     * @returns {number[]} An array of binary place values in descending order.
+*/
+const negativeNumberHandler = (arrBinary) => {
+    console.log("Handling negative number...");
+    // Create a flipped version of the binary array
+    const flippedBinary = arrBinary.map(bit => (bit === 1 ? 0 : 1));
+
+    // Add 1 to the flipped binary (Two's complement logic)
+    let carry = 1;
+    for (let i = flippedBinary.length - 1; i >= 0; i--) {
+        let sum = flippedBinary[i] + carry; // If flippedBinary[i] = 1, then sum = 2. If flippedBinary[i] = 0, then sum = 1.
+        flippedBinary[i] = sum % 2; // If sum is 2, flippedBinary[i] = 0. If sum is 1, flippedBinary[i] = 1. If sum is 0, flippedBinary[i] = 0.
+        carry = Math.floor(sum / 2); // If sum is 2, carry = 1. If sum is 1, carry = 0. If sum is 0, carry = 0.        
+
+        console.log(`Efter flippedBinary[i] = ${flippedBinary[i]} efter sum = ${sum} efter carry = ${carry}`);
+    }
+
+    console.log(`Binary after adding 1 (Two's Complement): ${flippedBinary}`);
+    return flippedBinary;
+};
+
+
+
 // Calculation
 const calculate = (input) => {
     if (typeof input === "number") {
         //If the value is negative then it will be converted to a positive number
         let inputIsNegativeNum
         if (input < 0) {
+            console.log(`Input number is a negative number`);
             inputIsNegativeNum = true;
             input = Math.abs(input);
         } else {
@@ -20,23 +66,7 @@ const calculate = (input) => {
         let arrBinary = [];
         let mutateInput = input
 
-
-        // Finds Binary place values
-        const arrBinaryPlaceValues = []
-        for (let i = 1; i < input; i *= 2) {
-            arrBinaryPlaceValues.push(i);
-            if ((i * 2) > input) {
-                arrBinaryPlaceValues.push(i *= 2);
-            }
-        }
-        arrBinaryPlaceValues.reverse();
-        console.log(`This is the Binary place values for ${input} -> ${arrBinaryPlaceValues}`); 
-
-
-        // Hvis det første af de højseste tal der er mindre eller lig med input numret. og minus input med det tal.
-        // Find det næste tal der er lig med eller mindre end input numret.
-        // 
-
+        const arrBinaryPlaceValues = arrGetBinaryPlaceValues(input);
 
         arrBinaryPlaceValues.forEach(element => {
             if (element <= mutateInput) {
@@ -47,65 +77,14 @@ const calculate = (input) => {
             }
         });
 
-        // Hvis input nummer er minus skal binary numbers flippes efter mindste binary place number
-        const obj = {};
         if (inputIsNegativeNum) {
-            for (let i = arrBinaryPlaceValues.length; i > -1; i--) {
-                obj[arrBinaryPlaceValues[i]] = arrBinary[i];
-            }
-            console.log(`obj now with values = ${JSON.stringify(obj)}`);
-                
-            let lowestNumberFound = false;
-            arrBinary = [];
-            for (let i in obj) {            
-                if (lowestNumberFound) {
-                    //Flip values after lowest number with the value of 1;
-                    obj[i] = obj[i] === 1 ? 0 : 1;
-                }
-
-                if (!lowestNumberFound && obj[i] === 1) {
-                    lowestNumberFound = true;
-                    console.log(`Lowest value is ${i}`);
-                }
-                arrBinary.push(obj[i]);
-            }
-            console.log(`obj now with values = ${JSON.stringify(obj)} flipped`);
+            arrBinary = negativeNumberHandler(arrBinary);
         }
 
         console.log(`This is the ${input} in Two's Complement binary ${arrBinary}`);
-        /* Instead of the above for each loop this loop would give the same result.
-            for (let i = 0; i < arrBinaryPlaceValues.length; i++) {
-                if (arrBinaryPlaceValues[i] <= mutateInput) {
-                    arrBinary.push(1);
-                    mutateInput -= arrBinaryPlaceValues[i];
-                } else {
-                    arrBinary.push(0);
-                }
-            }
-        */
-
     }
     
 
 }
 
 calculate(userInput);
-
-/* 
-binary place values
-0   0   0   0   0   0   0   0
-128 64  32  16  8   4   2   1
-    Example:
-        input = 22
-        Find binary place values {
-            func () {
-                for (i = 1; i < Input; i * 2) {
-
-                    return i // we now got the binary place values should in this case be 32
-                }
-            }
-        }
-        
-
-
-*/
