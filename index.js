@@ -9,12 +9,18 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const arrGetBinaryPlaceValues = async (positiveNumber) => {
     // Finds Binary place values
     const arrBinaryPlace = []
-    for (let i = 1; i < positiveNumber; i *= 2) {
-        arrBinaryPlace.push(i);
-        if ((i * 2) > positiveNumber) {
-            arrBinaryPlace.push(i *= 2);
+    let binaryPlaceValueIndex = 1;
+
+    do {
+        console.log(`Adding ${binaryPlaceValueIndex}`);
+        arrBinaryPlace.push(binaryPlaceValueIndex);
+        if ((binaryPlaceValueIndex * 2 ) > positiveNumber) {
+            console.log(`Adding ${binaryPlaceValueIndex * 2}`);
+            arrBinaryPlace.push(binaryPlaceValueIndex *= 2);   
         }
-    }
+        binaryPlaceValueIndex *= 2;
+    } while (binaryPlaceValueIndex <= positiveNumber);
+
     arrBinaryPlace.reverse();
     console.log(`This is the Binary place values for ${positiveNumber} -> ${arrBinaryPlace}`); 
     await delay(3000);
@@ -64,7 +70,7 @@ const negativeNumberHandler = async (arrBinary) => {
 const calculate = async () => {
     let userInput = parseInt(prompt());
     if (!isNaN(userInput)) {
-        //If the value is negative then it will be converted to a positive number
+        //If the value is negative it will be converted to a positive number
         let inputIsNegativeNum
         if (userInput < 0) {
             inputIsNegativeNum = true;
