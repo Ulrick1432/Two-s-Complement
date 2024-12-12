@@ -1,9 +1,3 @@
-const prompt = require('prompt-sync')();
-
-const message = 'My name is Ulrick :D';
-
-
-
 /**
  * An object containing methods for simulating typing text in the terminal.
  *
@@ -15,22 +9,21 @@ const message = 'My name is Ulrick :D';
 const typeText = {
 
   typeMessage: function (message, delay = 100) {
-    let i = 0;
-
-    let action = setInterval(() => {
-      process.stdout.write(message[i]);
-      i++;
-      if (i === message.length) {
-        clearInterval(action);
-        console.log();
-      }
-
-    }, delay);
+    return new Promise((resolve) => {
+      let i = 0;
+      let action = setInterval(() => {
+        process.stdout.write(message[i]);
+        i++;
+        if (i === message.length) {
+          clearInterval(action);
+          console.log();
+          resolve(); // Resolve the promise when done
+        }
+      }, delay);
+    });
   },
 
 
 }
 
-typeText.typeMessage(message, 50);
-
-module.export = typeText;
+module.exports = typeText;
