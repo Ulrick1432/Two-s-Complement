@@ -7,11 +7,10 @@
  */
 
 const typeText = {
-
-  typeMessage: function (message, delay = 100) {
+  typeMessage: function (message = "", delay = 20) {
     return new Promise((resolve) => {
       let i = 0;
-      let action = setInterval(() => {
+      const action = setInterval(() => {
         process.stdout.write(message[i]);
         i++;
         if (i === message.length) {
@@ -22,8 +21,6 @@ const typeText = {
       }, delay);
     });
   },
-
-
-}
+};
 
 module.exports = typeText;
