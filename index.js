@@ -38,7 +38,7 @@ const arrGetBinaryPlaceValues = async (positiveNumber) => {
             await typeText.typeMessage(`${arrBinaryPlace} we now also know have many bit is at least needed → ${arrBinaryPlace.length}`);
         }
         if ((binaryPlaceValueIndex * 2 ) <= positiveNumber) {
-            await typeText.typeMessage(`checking if the binary place value (${binaryPlaceValueIndex}) is less than or equal to ur input (${positiveNumber})...`);
+            await typeText.typeMessage(`check if the binary place value (${binaryPlaceValueIndex}) is less than or equal to ur input (${positiveNumber})...`);
             await typeText.typeMessage(`Which it is. We then add binaryPlaceValueIndex * 2 (${binaryPlaceValueIndex * 2}) as our next binary place value`);
         }
         binaryPlaceValueIndex *= 2;
@@ -75,11 +75,27 @@ const negativeNumberHandler = async (arrBinary, userInput) => {
     for (let i = flippedBinary.length - 1; i >= 0; i--) {
 
         await typeText.typeMessage(`------- Loop index = ${i} -------`);
-        let sum = flippedBinary[i] + carry; // If flippedBinary[i] = 1, then sum = 2. If flippedBinary[i] = 0, then sum = 1.
-        await typeText.typeMessage(`Before logic carry = ${carry} and flippedBinary[i] = ${flippedBinary[i]} and sum (carry + flippedBinary[i]) = ${sum}`);
-        flippedBinary[i] = sum % 2; // If sum is 2, flippedBinary[i] = 0. If sum is 1, flippedBinary[i] = 1. If sum is 0, flippedBinary[i] = 0.
-        carry = Math.floor(sum / 2); // If sum is 2, carry = 1. If sum is 1, carry = 0. If sum is 0, carry = 0.
-        await typeText.typeMessage(`After logic carry = ${carry} and flippedBinary[i] = ${flippedBinary[i]}`);
+        let sum = flippedBinary[i] + carry;
+        await typeText.typeMessage(
+            `At position ${i}: \n` +
+            `- The current binary bit is ${flippedBinary[i]}.\n` +
+            `- The carry is ${carry}.\n` +
+            `- Adding these together gives sum = ${flippedBinary[i]} + ${carry} = ${sum}.`
+        );
+        flippedBinary[i] = sum % 2;
+        await typeText.typeMessage(
+            `The new binary bit at position ${i} is determined as follows:\n` +
+            `- If the sum is even (0 or 2), the bit becomes 0.\n` +
+            `- If the sum is odd (1), the bit becomes 1.\n` +
+            `So, the updated binary bit is ${flippedBinary[i]}.`
+        );
+        carry = Math.floor(sum / 2);
+        await typeText.typeMessage(
+            `The carry is determined as follows:\n` +
+            `- If the sum is 2 or more, we "carry over" a 1 to the next higher bit.\n` +
+            `- If the sum is less than 2, there is no carry (carry = 0).\n` +
+            `Thus, the carry is now ${carry}.`
+        );
 
         //console.log(`Step: Bit position ${i}, Flipped bit: ${flippedBinary[i]}, Carry: ${carry}`);
         await delay(3000);
