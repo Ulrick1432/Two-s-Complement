@@ -1,8 +1,8 @@
 # Two's Complement
 
 ## Description
-The goal of this project is to create a Node.js program that explains -
-how to calculate the binary representation of positive, negative, and zero integers -
+The goal of this project is to create a Node.js program that explains
+how to calculate the binary representation of positive, negative, and zero integers
 using the Two's Complement method in a simplified way.
 
 ## Prerequisites
